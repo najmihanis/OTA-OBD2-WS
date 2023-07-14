@@ -18,7 +18,7 @@ int status = WL_IDLE_STATUS;
 int incomingByte;
 
 String FirmwareVer = {
-    "1.0"
+    "2.0"
 };
 
 #define URL_fw_Version "https://raw.githubusercontent.com/najmihanis/OTA-OBD2-WS/main/bin-version.txt" //change this text in github everytime got new update
@@ -38,6 +38,33 @@ AsyncWebSocket ws("/ws");
 // Simplified index_html. This will just display messages.
 const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE HTML><html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+    #messages {
+      margin: 20px;
+      padding: 20px;
+      border-radius: 5px;
+      background-color: #fff;
+      box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+    }
+    #messages:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    #messages p {
+      margin: 0;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+  </style>
+</head>
 <body>
   <div id="messages"></div>
   <script>
@@ -49,7 +76,7 @@ const char index_html[] PROGMEM = R"rawliteral(
       websocket = new WebSocket(gateway);
       websocket.onopen    = onOpen;
       websocket.onclose   = onClose;
-      websocket.onmessage = onMessage;
+      websocket.onmessage = onMessage; 
     }
     function onOpen(event) {
       console.log('Connection opened');
@@ -59,7 +86,9 @@ const char index_html[] PROGMEM = R"rawliteral(
       setTimeout(initWebSocket, 2000);
     }
     function onMessage(event) {
-      document.getElementById('messages').innerHTML += event.data + '<br>';
+      var p = document.createElement('p');
+      p.textContent = event.data;
+      document.getElementById('messages').appendChild(p);
     }
     function onLoad(event) {
       initWebSocket();
@@ -80,6 +109,7 @@ void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType 
   switch (type) {
     case WS_EVT_CONNECT:
       Serial.printf("WebSocket client #%u connected from %s\n", client->id(), client->remoteIP().toString().c_str());
+      sendFirmwareVersion();
       break;
     case WS_EVT_DISCONNECT:
       Serial.printf("WebSocket client #%u disconnected\n", client->id());
@@ -252,8 +282,8 @@ void setup(){
   firmwareScan();
   delay(1000);
 //display current version on client devices
-  sendFirmwareVersion();
-  delay(1000);
+  //sendFirmwareVersion();
+  //delay(1000);
 //***********************************OBD2-WS Part*******************************************
 //=====================CAN stuff==========================================================
   while (!Serial);
