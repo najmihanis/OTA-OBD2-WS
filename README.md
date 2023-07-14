@@ -1,4 +1,4 @@
-# Vehicle Telematics and Anti-Theft System with ESP32
+# Vehicle Telematics and Over-The-Air Firmware Updates with ESP32
 
 ## Introduction
 
