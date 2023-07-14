@@ -20,6 +20,9 @@ To implement the solution, follow these steps:
 2. Replace the placeholders in the code with your credentials.
 3. Upload the firmware to your ESP32.
 4. Connect your ESP32 to your vehicle's OBD2 interface.
+5. If there's new firmware that you developed, save it as "fw.bin" and replace the current "fw.bin" in the git
+6. Replace the text reflecting your new version in the "bin-version.txt" file
+7. Reset your ESP32 by pressing the Enable (EN) button
 
 ## System Details
 
